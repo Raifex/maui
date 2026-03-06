@@ -357,14 +357,13 @@ namespace Microsoft.Maui.Platform
 				return new SafeAreaPadding(left, right, top, bottom);
 			}
 
-			// Fallback to legacy ISafeAreaView behavior
-			if (View is ISafeAreaView sav)
+			// Fallback to legacy behavior
+			if (View is ISafeAreaView sav && sav.IgnoreSafeArea)
 			{
-				return sav.IgnoreSafeArea ? SafeAreaPadding.Empty : baseSafeArea;
+				return SafeAreaPadding.Empty;
 			}
 
-			// Non-safe-area views pass through to parent
-			return SafeAreaPadding.Empty;
+			return baseSafeArea;
 		}
 
 		/// <summary>
@@ -687,6 +686,14 @@ namespace Microsoft.Maui.Platform
 		[UnconditionalSuppressMessage("Memory", "MEM0002", Justification = IUIViewLifeCycleEvents.UnconditionalSuppressMessage)]
 		EventHandler? _movedToWindow;
 
+		public MauiView(NativeHandle handle) : base(handle)
+		{
+		}
+
+		public MauiView()
+		{
+		}
+
 		/// <summary>
 		/// Event fired when this view is moved to a window (added to or removed from the view hierarchy).
 		/// This is part of the IUIViewLifeCycleEvents interface and allows subscribers to react to
@@ -729,33 +736,6 @@ namespace Microsoft.Maui.Platform
 			}
 
 			UpdateKeyboardSubscription();
-		}
-
-		/// <summary>
-		/// Called when the focus environment updates. This method propagates native iOS focus
-		/// changes to the cross-platform layer by updating the IsFocused property of the
-		/// associated IView when this MauiView gains or loses focus.
-		/// </summary>
-		/// <param name="context">Information about the focus update</param>
-		/// <param name="coordinator">Coordinator for focus animations</param>
-		public override void DidUpdateFocus(UIFocusUpdateContext context, UIFocusAnimationCoordinator coordinator)
-		{
-			base.DidUpdateFocus(context, coordinator);
-
-			if (context.NextFocusedView == this)
-			{
-				if (CrossPlatformLayout is IView view)
-				{
-					view.IsFocused = true;
-				}
-			}
-			else
-			{
-				if (CrossPlatformLayout is IView view)
-				{
-					view.IsFocused = false;
-				}
-			}
 		}
 	}
 }
