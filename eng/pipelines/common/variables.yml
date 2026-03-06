@@ -55,13 +55,10 @@ variables:
 - group: MAUI # This is the main MAUI variable group that contains secrets for the apple certificate
 
 # Variable groups required for all builds
-- ${{ if and(ne(variables['Build.DefinitionName'], 'maui-pr'), ne(variables['Build.DefinitionName'], 'dotnet-maui'),  ne(variables['Build.DefinitionName'], 'maui-pr-devicetests'),  ne(variables['Build.DefinitionName'], 'maui-pr-uitests')) }}:
+- ${{ if and(ne(variables['Build.DefinitionName'], 'maui-pr'), ne(variables['Build.DefinitionName'], 'dotnet-maui'),  ne(variables['Build.DefinitionName'], 'maui-pr-devicetests')) }}:
   - group: maui-provisionator # This is just needed for the provisionator
 
-
-- ${{ if or(eq(variables['System.TeamProject'], 'DevDiv'), eq(variables['Build.DefinitionName'], 'dotnet-maui'), eq(variables['Build.DefinitionName'], 'dotnet-maui-build')) }}:
-  - name: internalProvisioning
-    value: true
+- ${{ if or(eq(variables['Build.DefinitionName'], 'dotnet-maui'), eq(variables['Build.DefinitionName'], 'dotnet-maui-build')) }}:
   - ${{ if notin(variables['Build.Reason'], 'PullRequest') }}:
     - name: PrivateBuild
       value: false
@@ -71,13 +68,23 @@ variables:
       value: true
     - name: _SignType
       value: real
+<<<<<<< HEAD
+=======
 
     - group: AzureDevOps-Artifact-Feeds-Pats
-  
+
 - ${{ if eq(variables['Build.DefinitionName'], 'dotnet-maui') }}:
   - ${{ if notin(variables['Build.Reason'], 'PullRequest') }}:
     # Publish-Build-Assets provides: MaestroAccessToken, BotAccount-dotnet-maestro-bot-PAT
     # DotNet-HelixApi-Access provides: HelixApiAccessToken
     - group: Publish-Build-Assets
+>>>>>>> 5aa9ced8f632c5cebe1bd627d52c129ade4b8447
     - group: DotNet-HelixApi-Access
     - group: SDL_Settings
+    - group: AzureDevOps-Artifact-Feeds-Pats
+    - ${{ if eq(variables['Build.DefinitionName'], 'dotnet-maui') }}:
+      - group: Publish-Build-Assets # This variable group contains secrets to publis to BAR
+
+
+    - group: AzureDevOps-Artifact-Feeds-Pats
+

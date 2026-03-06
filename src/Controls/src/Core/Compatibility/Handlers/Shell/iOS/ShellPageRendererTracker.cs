@@ -7,6 +7,7 @@ using System.Runtime.Versioning;
 using System.Windows.Input;
 using CoreGraphics;
 using Foundation;
+using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Graphics.Platform;
 using UIKit;
 using static Microsoft.Maui.Controls.Compatibility.Platform.iOS.AccessibilityExtensions;
@@ -498,12 +499,12 @@ namespace Microsoft.Maui.Controls.Platform.Compatibility
 
 				UIImage? icon = null;
 
+				var foregroundColor = _context?.Shell.CurrentPage?.GetValue(Shell.ForegroundColorProperty) as Color ??
+					_context?.Shell.GetValue(Shell.ForegroundColorProperty) as Color;
+
 				if (image is not null)
 				{
 					icon = result?.Value;
-
-					var foregroundColor = _context?.Shell.CurrentPage?.GetValue(Shell.ForegroundColorProperty) ??
-					_context?.Shell.GetValue(Shell.ForegroundColorProperty);
 
 					if (foregroundColor is null)
 					{
@@ -542,6 +543,16 @@ namespace Microsoft.Maui.Controls.Platform.Compatibility
 				{
 					NavigationItem.LeftBarButtonItem =
 						new UIBarButtonItem(icon, UIBarButtonItemStyle.Plain, (s, e) => LeftBarButtonItemHandler(ViewController, IsRootPage)) { Enabled = enabled };
+						
+					// For iOS 26+, explicitly set the tint color on the bar button item
+					// because the navigation bar's tint color is not automatically inherited
+					if (OperatingSystem.IsIOSVersionAtLeast(26) || OperatingSystem.IsMacCatalystVersionAtLeast(26))
+					{
+						if (foregroundColor is not null)
+						{
+							NavigationItem.LeftBarButtonItem.TintColor = foregroundColor.ToPlatform();
+						}
+					}
 				}
 				else
 				{
@@ -761,7 +772,11 @@ namespace Microsoft.Maui.Controls.Platform.Compatibility
 				// Set frame to match navigation bar dimensions, starting at origin (0,0)
 				// The X and Y are set to 0 because this view will be positioned by the navigation bar
 				Frame = new CGRect(0, 0, navigationBarFrame.Width, navigationBarFrame.Height);
+<<<<<<< HEAD
 				Height = navigationBarFrame.Height;  // Set Height for MatchHeight logic
+=======
+         		Height = navigationBarFrame.Height;  // Set Height for MatchHeight logic
+>>>>>>> 5aa9ced8f632c5cebe1bd627d52c129ade4b8447
 			}
 
 			public override CGRect Frame
