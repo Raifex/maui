@@ -1,2 +1,3 @@
-#nullable enable
-override Microsoft.Maui.Platform.MauiView.DidUpdateFocus(UIKit.UIFocusUpdateContext! context, UIKit.UIFocusAnimationCoordinator! coordinator) -> void
+﻿#nullable enable
+Microsoft.Maui.Platform.LayoutView.LayoutView(ObjCRuntime.NativeHandle handle) -> void
+Microsoft.Maui.Platform.MauiView.MauiView(ObjCRuntime.NativeHandle handle) -> void

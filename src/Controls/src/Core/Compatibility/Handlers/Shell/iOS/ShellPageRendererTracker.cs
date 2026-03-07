@@ -276,7 +276,7 @@ namespace Microsoft.Maui.Controls.Platform.Compatibility
 				ViewController.AutomaticallyAdjustsScrollViewInsets = false;
 			}
 		}
-		
+
 		internal void UpdateTitleViewInternal()
 		{
 			UpdateTitleView();
@@ -543,7 +543,7 @@ namespace Microsoft.Maui.Controls.Platform.Compatibility
 				{
 					NavigationItem.LeftBarButtonItem =
 						new UIBarButtonItem(icon, UIBarButtonItemStyle.Plain, (s, e) => LeftBarButtonItemHandler(ViewController, IsRootPage)) { Enabled = enabled };
-						
+
 					// For iOS 26+, explicitly set the tint color on the bar button item
 					// because the navigation bar's tint color is not automatically inherited
 					if (OperatingSystem.IsIOSVersionAtLeast(26) || OperatingSystem.IsMacCatalystVersionAtLeast(26))
@@ -772,11 +772,7 @@ namespace Microsoft.Maui.Controls.Platform.Compatibility
 				// Set frame to match navigation bar dimensions, starting at origin (0,0)
 				// The X and Y are set to 0 because this view will be positioned by the navigation bar
 				Frame = new CGRect(0, 0, navigationBarFrame.Width, navigationBarFrame.Height);
-<<<<<<< HEAD
 				Height = navigationBarFrame.Height;  // Set Height for MatchHeight logic
-=======
-         		Height = navigationBarFrame.Height;  // Set Height for MatchHeight logic
->>>>>>> 5aa9ced8f632c5cebe1bd627d52c129ade4b8447
 			}
 
 			public override CGRect Frame
